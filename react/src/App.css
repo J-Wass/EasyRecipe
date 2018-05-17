@@ -14,15 +14,16 @@
   }
 }
 
-a:hover {
+.navbar a:hover {
   text-decoration: none !important;
 }
 
-a[role="button"]:hover {
-  border-bottom: 1px solid purple;
+.navbar a[role="button"]:hover {
+  border-bottom: 2px solid purple;
+  padding-bottom: 13px;
 }
 
-a {
+.navbar a {
   color: grey !important;
 }
 

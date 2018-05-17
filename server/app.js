@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 var path = require('path');
+var sqlite3 = require('sqlite3').verbose()
+var db = new sqlite3.Database(':memory:')
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');

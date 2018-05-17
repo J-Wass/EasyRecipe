@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {Navbar, Nav, NavItem,FormGroup,FormControl,InputGroup} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
+import RecipeListing from './Components/RecipeListing.js';
 
 //REGION - ROUTER
 const MainRouter = () => (
@@ -11,7 +12,7 @@ const MainRouter = () => (
     <div>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous" />
       <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossOrigin="anonymous" />
-      <Navbar light collapseOnSelect>
+      <Navbar collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
             <Link className="nav-link" to="/home">Easy Recipe</Link>
@@ -20,15 +21,15 @@ const MainRouter = () => (
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem href="#">
-              <Link className="nav-link" to="/recipes">Recipes</Link>
+            <NavItem eventkey={1} componentClass={Link} role="button" href="/recipes" to="/recipes">
+              Recipes
             </NavItem>
-            <NavItem href="#">
-              <Link className="nav-link" to="/help">Help</Link>
+            <NavItem eventkey={2} componentClass={Link} role="button" href="/help" to="/help">
+              Help
             </NavItem>
           </Nav>
           <Nav pullRight>
-             <Navbar.Form pullLeft>
+             <Navbar.Form eventkey={3} pullLeft>
               <FormGroup>
                 <InputGroup>
                   <FormControl id="search" type="text" placeholder="Search (recipe, ingredients, author, etc...)" />
@@ -38,40 +39,20 @@ const MainRouter = () => (
                 </InputGroup>
               </FormGroup>
             </Navbar.Form>
-            <NavItem href="#">
-              <Link className="nav-link" to="/e/f">Login</Link>
+            <NavItem eventkey={4} componentClass={Link} role="button" href="/recipe/1" to="/recipe/1">
+              Login
             </NavItem>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
 
-      <Route path="/:user/:name" component={Child} />
-      <Route path="/home" component={Home} />
-      <Route path="/help" component={Help} />
-      <Route path="/recipes" component={Recipes} />
+      <Route path="/recipe/:id" component={RecipeComponent} />
+      <Route path="/home" component={HomeComponent} />
+      <Route path="/help" component={HelpComponent} />
+      <Route path="/recipes" component={RecipeListing} />
     </div>
   </Router>
 );
-//ENDREGION - ROUTER
-//REGION - ROUTE CONSTANTS
-const Child = ({ match }) => (
-  <Box user={match.params.user} name={match.params.name}/>
-);
-const Help = ({ match }) => (
-  <HelpComponent />
-);
-const Recipes = ({ match }) => (
-  <RecipeComponent />
-);
-//ENDREGION - ROUTE CONSTANTS
-//REGION - COMPONENTS
-class RecipeComponent extends Component {
-  render() {
-    return (
-      <div></div>
-    );
-  }
-}
 
 class HelpComponent extends Component {
   render() {
@@ -81,7 +62,19 @@ class HelpComponent extends Component {
   }
 }
 
-class Home extends Component {
+class RecipeComponent extends Component {
+  constructor(props){
+    super(props);
+    console.log(props.match.params.id);
+  }
+  render() {
+    return (
+      <div>{this.props.match.params.id}</div>
+    );
+  }
+}
+
+class HomeComponent extends Component {
   render() {
     return (
       <div className="App">
@@ -97,15 +90,12 @@ class Home extends Component {
   }
 }
 
-class Box extends Component{
+/*class Box extends Component{
   constructor(props){
     super(props);
     fetch('http://localhost:3000/test/'+this.props.user+'/'+this.props.name+'.json')
-    /*.then((response) => response.json()).then((responseJson) => {
+    .then((response) => response.json()).then((responseJson) => {
       console.log(responseJson);
-    })*/
-    .then((response) => {
-      console.log(response);
     })
     .catch((error) => {
       console.error(error);
@@ -119,7 +109,6 @@ class Box extends Component{
       </div>
     )
   }
-}
-//ENDREGION - COMPONENTS
+}*/
 
 export default MainRouter;
