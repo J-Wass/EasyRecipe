@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {Navbar, Nav, NavItem,FormGroup,FormControl,InputGroup} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import RecipeListing from './Components/RecipeListing.js';
+import Recipe from './Components/Recipe.js';
 
 //REGION - ROUTER
 const MainRouter = () => (
@@ -46,7 +47,7 @@ const MainRouter = () => (
         </Navbar.Collapse>
       </Navbar>
 
-      <Route path="/recipe/:id" component={RecipeComponent} />
+      <Route path="/recipe/:id" component={Recipe} />
       <Route path="/home" component={HomeComponent} />
       <Route path="/help" component={HelpComponent} />
       <Route path="/recipes" component={RecipeListing} />
@@ -58,18 +59,6 @@ class HelpComponent extends Component {
   render() {
     return (
       <div></div>
-    );
-  }
-}
-
-class RecipeComponent extends Component {
-  constructor(props){
-    super(props);
-    console.log(props.match.params.id);
-  }
-  render() {
-    return (
-      <div>{this.props.match.params.id}</div>
     );
   }
 }
@@ -89,26 +78,5 @@ class HomeComponent extends Component {
     );
   }
 }
-
-/*class Box extends Component{
-  constructor(props){
-    super(props);
-    fetch('http://localhost:3000/test/'+this.props.user+'/'+this.props.name+'.json')
-    .then((response) => response.json()).then((responseJson) => {
-      console.log(responseJson);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
-  render(){
-    return (
-      <div>
-        <div>{this.props.user}</div>
-        <div>{this.props.name}</div>
-      </div>
-    )
-  }
-}*/
 
 export default MainRouter;
