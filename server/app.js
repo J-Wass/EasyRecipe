@@ -14,11 +14,6 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/test/:param1/:param2', function (req, res) {
-  console.log("testing")
-  res.send('this is a test:' + req.params.param1 + ", " + req.params.param2);
-});
-
 //returns a json object of all recipes in the database
 app.get('/recipelisting', function (req, res) {
   db = new sqlite3.Database('./EasyRecipe.db', (err) => {
@@ -26,15 +21,57 @@ app.get('/recipelisting', function (req, res) {
       return console.error(err.message);
     }
   });
-  recipes = new Array();
-  db.each("SELECT id,name, notes, created FROM recipes", [],
-      (err, result) => { //build recipe list
-        recipes.push(result);
-      },
-      () => { //callback
-        res.send(JSON.stringify(recipes));
+  db.all("SELECT id, name, notes, created FROM recipes;", [],
+      (err, recipes) => { //build recipe list
+        res.send(recipes);
+        db.close();
+      }
+    );
+});
+
+//returns a json object of all directions based on a recipe id
+app.get('/getDirections/:id', function (req, res) {
+  db = new sqlite3.Database('./EasyRecipe.db', (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+  });
+  db.all("SELECT step, direction FROM directions WHERE recipeid=?", [req.params.id],
+      (err, directions) => { //build direction list
+        res.send(JSON.stringify(directions));
       }
   );
+  db.close();
+});
+
+//returns a json object of all ingredients based on a recipe id
+app.get('/getIngredients/:id', function (req, res) {
+  db = new sqlite3.Database('./EasyRecipe.db', (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+  });
+  db.all("SELECT step, ingredient, amount FROM ingredients WHERE recipeid=?", [req.params.id],
+      (err, ingredients) => {
+        res.send(JSON.stringify(ingredients));
+      }
+  );
+  db.close();
+});
+
+//returns a json object of a recipe based on recipe id
+app.get('/getRecipe/:id', function (req, res) {
+  db = new sqlite3.Database('./EasyRecipe.db', (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+  });
+  db.get("SELECT name, notes, created, userid FROM recipes WHERE id=?;", [req.params.id],
+      (err, recipe) => {
+        res.send(JSON.stringify(recipe));
+      }
+    );
+    db.close();
 });
 
 //submit into recipes, directions, and ingredients
@@ -73,10 +110,13 @@ app.post('/submit-recipe', function (req, res) {
                           $amt: amounts[i]
                       });
                 }
-              }); //end db get
-            } //end callback
-    ); //end recipe table insert
-  db.close();
+              },
+              () => {
+                db.close(); //close db after all inserts are done
+              }
+            ); //end db get
+            } //end insert callback
+    ); //end recipe SQL insert
   res.redirect("/");
 });
 

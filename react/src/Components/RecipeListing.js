@@ -15,17 +15,14 @@ class RecipeListing extends Component {
 
   componentDidMount(){
     //pull all recipes from database and put them into state
-    /*fetch('http://localhost:3000/recipelisting/')
+    fetch('http://localhost:3000/recipelisting/')
     .then((response) => response.json()).then((responseJson) => {
       this.setState({recipes: responseJson});
+      console.log(responseJson)
     })
     .catch((error) => {
       console.error(error);
-    });*/
-    let sampleJSON = '[{ "id": 7,"name": "jonahs recipe","notes": "works sometimes","created": \
-    "2018-05-21 01:41:49" },{ "id": 8,"name": "awdad","notes": "awdad","created": "2018-05-21 \
-     01:42:28" }]';
-    this.setState({recipes: JSON.parse(sampleJSON)});
+    });
   }
 
 
