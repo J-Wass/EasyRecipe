@@ -18,7 +18,6 @@ class RecipeListing extends Component {
     fetch('http://localhost:3000/recipelisting/')
     .then((response) => response.json()).then((responseJson) => {
       this.setState({recipes: responseJson});
-      console.log(responseJson)
     })
     .catch((error) => {
       console.error(error);

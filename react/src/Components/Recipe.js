@@ -16,13 +16,11 @@ class Recipe extends Component {
     fetch('http://localhost:3000/getDirections/'+this.props.match.params.id)
     .then((response) => response.json()).then((responseJson) => {
       //update directions
-      console.log(responseJson);
       this.setState({directions: responseJson});
     })
     fetch('http://localhost:3000/getIngredients/'+this.props.match.params.id)
     .then((response) => response.json()).then((responseJson) => {
       //update ingredients
-      console.log(responseJson);
       this.setState({ingredients: responseJson});
     })
     fetch('http://localhost:3000/getRecipe/'+this.props.match.params.id)
@@ -39,6 +37,7 @@ class Recipe extends Component {
       <div>
         <div className="container">
           {this.state.name} by {this.state.author}
+          <br/>
           <small><i>{this.state.date}</i></small>
         </div>
         <div className="container">
@@ -51,20 +50,21 @@ class Recipe extends Component {
                 Amount
               </th>
             </thead>
-            {this.state.ingredients != null
+            {this.state.ingredients.length > 0
               ?
               this.state.ingredients.map((i) => <tr><td>{i["ingredient"]}</td><td>{i["amount"]}</td></tr>)
               :
-              document.write("<tr><td>No directions found</td></tr>") }
+              <tr><td>No ingredients found</td></tr> }
           </table>
         </div>
         <div className="container">
+          <h1>Directions</h1>
           <ul>
-            {this.state.directions != null
+            {this.state.directions.length > 0
               ?
-              this.state.directions.map((d) => <li>{d["step"] - d["direction"]}</li>)
+              this.state.directions.map((d) => <li>{d["step"]} - {d["direction"]}</li>)
               :
-              document.write('<li>No directions found</li>') }
+              <li>No directions found</li>}
           </ul>
         </div>
         <div className="container">
